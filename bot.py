@@ -45,7 +45,8 @@ class ReminderManager:
             for i in range(len(self.reminders)):
                 r = self.reminders[0]
                 if r.when > now: break
-                await r.channel.send(f'<@{r.author.id}>, your reminder:\n> {r.message!s}')
+                m = '> ' + '\n> '.join(r.message.splitlines())
+                await r.channel.send(f'<@{r.author.id}>, your reminder:\n{m!s}')
                 self.reminders.pop(0)
             await asyncio.sleep(1)
 
@@ -93,12 +94,12 @@ class ReminderManager:
                 await r.channel.send(f'Permission denied')
 
         else:
-            m = re.match(r'^!reminder\s+(?P<ts>(\d+[smhd])+)\s+(?P<msg>.+)', message.content)
+            m = re.match(r'^!reminder\s+(?P<ts>(\d+[smhd])+)\s+', message.content)
             if m is None:
                 await usage()
                 return
             ts = m.group('ts')
-            msg = m.group('msg')
+            msg = message.content[m.span()[1]:]
             when = time.time()
             for val, unit in re.findall('(\d+)([dhms])', ts):
                 units = {'s': 1, 'm': 60, 'h':60*60, 'd': 24*60*60}
