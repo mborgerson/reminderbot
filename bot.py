@@ -82,16 +82,16 @@ class ReminderManager:
                 return
 
             if index is None:
-                await r.channel.send(f'Reminder {r_id} not found') 
+                await message.channel.send(f'Reminder {r_id} not found')
                 return
 
             r = self.reminders[index]
             can_remove = r.channel.permissions_for(message.author).manage_messages
             if (r.author == message.author) or can_remove:
                 self.reminders.pop(index)
-                await r.channel.send(f'Reminder {r.id_} cancelled')
+                await message.channel.send(f'Reminder {r.id_} cancelled')
             else:
-                await r.channel.send(f'Permission denied')
+                await message.channel.send('Permission denied')
 
         else:
             m = re.match(r'^!reminder\s+(?P<ts>(\d+[smhd])+)\s+', message.content)
