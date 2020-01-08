@@ -52,7 +52,7 @@ class ReminderManager:
 
     async def on_message(self, message):
         async def usage():
-            await message.channel.send(f'Try !reminder help')
+            await message.channel.send('Try !reminder help')
 
         m = message.content.split()
         if len(m) < 2:
@@ -82,7 +82,7 @@ class ReminderManager:
                 return
 
             if index is None:
-                await message.channel.send(f'Reminder {r_id} not found')
+                await message.channel.send(f'Reminder {requested} not found')
                 return
 
             r = self.reminders[index]
